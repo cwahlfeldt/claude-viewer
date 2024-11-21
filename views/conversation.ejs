@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Claude Conversation</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- Add commonly used languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>Conversations</h1>
+                <a href="/" class="new-upload-button">New Upload</a>
+            </div>
+            
+            <nav class="conversation-list">
+                <% conversations.forEach((conv, idx) => { %>
+                    <a href="/conversation/<%= idx %>" 
+                       class="conversation-link <%= currentIndex === idx ? 'active' : '' %>">
+                        <div class="conversation-link-content">
+                            <span class="conversation-name"><%= truncate(conv.name, 40) %></span>
+                            <span class="conversation-date"><%= formatDate(conv.created_at) %></span>
+                        </div>
+                    </a>
+                <% }); %>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="conversation-container">
+                <div class="conversation-header">
+                    <h2><%= conversation.name %></h2>
+                    <div class="conversation-meta">
+                        <span>Created: <%= formatDate(conversation.created_at) %></span>
+                        <span>Last updated: <%= formatDate(conversation.updated_at) %></span>
+                    </div>
+                </div>
+
+                <div class="messages">
+                    <% conversation.chat_messages.forEach(message => { %>
+                        <div class="message <%= message.sender %>">
+                            <div class="message-header">
+                                <span class="sender"><%= message.sender %></span>
+                                <span class="timestamp"><%= formatTime(message.created_at) %></span>
+                            </div>
+                            <div class="content">
+                                <% message.content.forEach(content => { %>
+                                    <% if (content.type === 'text') { %>
+                                        <%- formatMessage(content.text) %>
+                                    <% } %>
+                                <% }); %>
+                            </div>
+                            <% if (message.attachments && message.attachments.length > 0) { %>
+                                <div class="attachments">
+                                    <h4>Attachments:</h4>
+                                    <ul>
+                                        <% message.attachments.forEach(attachment => { %>
+                                            <li><%= attachment %></li>
+                                        <% }); %>
+                                    </ul>
+                                </div>
+                            <% } %>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize syntax highlighting
+            hljs.highlightAll();
+        
+            // Add copy buttons to code blocks
+            document.querySelectorAll('pre code').forEach((block) => {
+                // Create copy button
+                const button = document.createElement('button');
+                button.className = 'copy-button';
+                button.textContent = 'Copy';
+        
+                // Create wrapper div for the code block
+                const wrapper = document.createElement('div');
+                wrapper.className = 'code-block-wrapper';
+        
+                // Move the code block into the wrapper
+                block.parentNode.insertBefore(wrapper, block);
+                wrapper.appendChild(block.parentNode);
+                wrapper.insertBefore(button, block.parentNode);
+        
+                // Add click handler
+                button.addEventListener('click', async () => {
+                    try {
+                        await navigator.clipboard.writeText(block.textContent);
+                        button.textContent = 'Copied!';
+                        button.classList.add('copied');
+                        setTimeout(() => {
+                            button.textContent = 'Copy';
+                            button.classList.remove('copied');
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy:', err);
+                        button.textContent = 'Failed';
+                        button.classList.add('error');
+                        setTimeout(() => {
+                            button.textContent = 'Copy';
+                            button.classList.remove('error');
+                        }, 2000);
+                    }
+                });
+            });
+        });
+        </script>
+</body>
+</html>

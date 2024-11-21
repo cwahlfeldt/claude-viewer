@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Claude Conversation Viewer</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Claude Conversation Viewer</h1>
+        
+        <% if (hasExistingData) { %>
+            <div class="existing-data-notice">
+                <p>You have an existing conversation set loaded.</p>
+                <div class="button-group">
+                    <a href="/conversation/0" class="button">View Existing Conversations</a>
+                    <span class="or-divider">or</span>
+                </div>
+            </div>
+        <% } %>
+        
+        <div class="upload-area">
+            <p>Drag and drop your conversation JSON file here or click to select</p>
+            <p class="upload-note">Note: Uploading a new file will replace the existing conversations</p>
+            <input type="file" id="fileInput" accept=".json">
+        </div>
+        <div id="error" class="error"></div>
+    </div>
+    <script src="/script.js"></script>
+</body>
+</html>

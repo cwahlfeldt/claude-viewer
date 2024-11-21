@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Claude Conversations</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navigation">
+            <a href="/" class="back-button">← Upload Another File</a>
+        </nav>
+        
+        <% conversations.forEach(conversation => { %>
+            <div class="conversation-container">
+                <div class="conversation-header">
+                    <h2><%= conversation.name %></h2>
+                    <div class="conversation-meta">
+                        <span>Created: <%= formatDate(conversation.created_at) %></span>
+                        <span>Last updated: <%= formatDate(conversation.updated_at) %></span>
+                    </div>
+                </div>
+
+                <div class="messages">
+                    <% conversation.chat_messages.forEach(message => { %>
+                        <div class="message <%= message.sender %>">
+                            <div class="message-header">
+                                <span class="sender"><%= message.sender %></span>
+                                <span class="timestamp"><%= formatTime(message.created_at) %></span>
+                            </div>
+                            <div class="content">
+                                <% message.content.forEach(content => { %>
+                                    <% if (content.type === 'text') { %>
+                                        <p><%= content.text %></p>
+                                    <% } %>
+                                <% }); %>
+                            </div>
+                            <% if (message.attachments && message.attachments.length > 0) { %>
+                                <div class="attachments">
+                                    <h4>Attachments:</h4>
+                                    <ul>
+                                        <% message.attachments.forEach(attachment => { %>
+                                            <li><%= attachment %></li>
+                                        <% }); %>
+                                    </ul>
+                                </div>
+                            <% } %>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+
+    <% function formatDate(dateString) { %>
+        <% return format(parseISO(dateString), 'PPP'); %>
+    <% } %>
+    
+    <% function formatTime(dateString) { %>
+        <% return format(parseISO(dateString), 'p'); %>
+    <% } %>
+</body>
+</html>

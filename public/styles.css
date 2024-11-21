@@ -1,0 +1,629 @@
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background: #f5f5f5;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.upload-area {
+    background: white;
+    border: 2px dashed #ccc;
+    padding: 40px;
+    text-align: center;
+    margin: 20px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.upload-area:hover {
+    border-color: #666;
+    background: #f9f9f9;
+}
+
+.conversation-container {
+    background: white;
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.conversation-header {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+.conversation-header h2 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+}
+
+.conversation-meta {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.conversation-meta span {
+    margin-right: 20px;
+}
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.message {
+    padding: 15px;
+    border-radius: 8px;
+    max-width: 85%;
+}
+
+.message.assistant {
+    background: #f0f7ff;
+    margin-right: auto;
+}
+
+.message.human {
+    background: #f5f5f5;
+    margin-left: auto;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.9em;
+}
+
+.sender {
+    font-weight: bold;
+    color: #666;
+}
+
+.timestamp {
+    color: #999;
+    font-size: 0.9em;
+}
+
+.content p {
+    margin: 0 0 10px 0;
+}
+
+.content p:last-child {
+    margin-bottom: 0;
+}
+
+.attachments {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.attachments h4 {
+    margin: 0 0 5px 0;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.attachments ul {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 0.9em;
+}
+
+.error {
+    color: #dc3545;
+    margin: 10px 0;
+    padding: 10px;
+    background: #fff;
+    border-radius: 4px;
+    border: 1px solid #dc3545;
+}
+
+.navigation {
+    margin: 20px 0;
+}
+
+.back-button {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #2c3e50;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.back-button:hover {
+    background: #34495e;
+}
+
+/* Add these new styles */
+.navigation {
+    position: sticky;
+    top: 0;
+    background: white;
+    padding: 15px 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+}
+
+.nav-left, .nav-right {
+    flex: 1;
+}
+
+.nav-center {
+    text-align: center;
+}
+
+.conversation-nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-button {
+    padding: 5px 15px;
+    background: #2c3e50;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.nav-button:hover:not(.disabled) {
+    background: #34495e;
+}
+
+.nav-button.disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.conversation-counter {
+    font-weight: 500;
+    color: #666;
+}
+
+/* Code formatting styles */
+pre {
+    background: #f8f9fa;
+    border-radius: 4px;
+    padding: 15px;
+    overflow-x: auto;
+    margin: 10px 0;
+}
+
+code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+p code {
+    background: #f8f9fa;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.content p {
+    margin: 0 0 1em 0;
+}
+
+.content p:last-child {
+    margin-bottom: 0;
+}
+
+/* Make sure code blocks don't overflow */
+.message {
+    overflow-x: auto;
+}
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5;
+    color: #333;
+}
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 300px;
+    background: white;
+    border-right: 1px solid #eee;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.sidebar-header h1 {
+    font-size: 1.5rem;
+    margin: 0 0 15px 0;
+}
+
+.new-upload-button {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #2c3e50;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: background 0.2s ease;
+}
+
+.new-upload-button:hover {
+    background: #34495e;
+}
+
+.conversation-list {
+    padding: 10px;
+}
+
+.conversation-link {
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+    color: #333;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    transition: background 0.2s ease;
+}
+
+.conversation-link:hover {
+    background: #f5f5f5;
+}
+
+.conversation-link.active {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.conversation-link-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.conversation-name {
+    font-weight: 500;
+}
+
+.conversation-date {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.conversation-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.conversation-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.conversation-header h2 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+}
+
+.conversation-meta {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.conversation-meta span {
+    margin-right: 20px;
+}
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.message {
+    padding: 15px;
+    border-radius: 8px;
+    max-width: 100%;
+}
+
+.message.assistant {
+    background: #f0f7ff;
+}
+
+.message.human {
+    background: #f5f5f5;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.9em;
+}
+
+.sender {
+    font-weight: bold;
+    color: #666;
+}
+
+.timestamp {
+    color: #999;
+    font-size: 0.9em;
+}
+
+/* Code formatting styles */
+pre {
+    background: #f8f9fa;
+    border-radius: 4px;
+    padding: 15px;
+    overflow-x: auto;
+    margin: 10px 0;
+}
+
+code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+p code {
+    background: #f8f9fa;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.content p {
+    margin: 0 0 1em 0;
+}
+
+.content p:last-child {
+    margin-bottom: 0;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid #eee;
+    }
+
+    .main-content {
+        padding: 10px;
+    }
+}
+
+.upload-area {
+    background: white;
+    border: 2px dashed #ccc;
+    padding: 40px;
+    text-align: center;
+    margin: 20px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.upload-area:hover {
+    border-color: #666;
+    background: #f9f9f9;
+}
+
+.error {
+    color: #dc3545;
+    margin: 10px 0;
+    padding: 10px;
+    background: #fff;
+    border-radius: 4px;
+    border: 1px solid #dc3545;
+}
+
+.existing-data-notice {
+    background: #e3f2fd;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.button-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.button {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #2c3e50;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.button:hover {
+    background: #34495e;
+}
+
+.or-divider {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.upload-note {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 10px;
+}
+
+.code-block-wrapper {
+    position: relative;
+    margin: 1em 0;
+}
+
+pre {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 2.5em 1em 1em 1em;
+    overflow-x: auto;
+    border: 1px solid #e1e4e8;
+    margin: 0;
+}
+
+pre code {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+    padding: 0;
+}
+
+.copy-button {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+    padding: 0.4em 0.8em;
+    background: #fff;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
+    font-size: 0.8em;
+    color: #24292e;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 1;
+}
+
+.copy-button:hover {
+    background: #f3f4f6;
+    border-color: #bbb;
+}
+
+.copy-button.copied {
+    background: #28a745;
+    color: white;
+    border-color: #28a745;
+}
+
+.copy-button.error {
+    background: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+/* Language tag */
+.hljs {
+    position: relative;
+    padding: 1em;
+}
+
+pre code.hljs::before {
+    content: attr(class);
+    position: absolute;
+    top: -2em;
+    left: 1em;
+    font-size: 0.8em;
+    color: #666;
+    text-transform: lowercase;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Highlight.js theme customizations */
+.hljs-comment,
+.hljs-quote {
+    color: #5c6370;
+    font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag {
+    color: #c678dd;
+}
+
+.hljs-string,
+.hljs-template-string {
+    color: #98c379;
+}
+
+.hljs-subst {
+    color: #e06c75;
+}
+
+.hljs-number {
+    color: #d19a66;
+}
+
+.hljs-variable,
+.hljs-template-variable {
+    color: #e06c75;
+}
+
+.hljs-built_in {
+    color: #56b6c2;
+}
+
+/* Code in message bubbles */
+.message pre {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.message.assistant pre {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+/* Inline code */
+p code {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-size: 0.9em;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
