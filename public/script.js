@@ -1,25 +1,34 @@
+// public/script.js
 document.addEventListener('DOMContentLoaded', () => {
     const fileInput = document.getElementById('fileInput');
     const uploadArea = document.querySelector('.upload-area');
     const errorDiv = document.getElementById('error');
 
-    // Add drag and drop visual feedback
+    // Create and add loading overlay
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'loading-overlay';
+    loadingOverlay.innerHTML = `
+        <div class="spinner"></div>
+        <div class="loading-text">Processing conversations...</div>
+    `;
+    document.body.appendChild(loadingOverlay);
+
     uploadArea.addEventListener('click', () => {
         fileInput.click();
     });
 
     uploadArea.addEventListener('dragover', (e) => {
         e.preventDefault();
-        uploadArea.style.backgroundColor = '#f9f9f9';
+        uploadArea.classList.add('dragging');
     });
 
     uploadArea.addEventListener('dragleave', () => {
-        uploadArea.style.backgroundColor = 'white';
+        uploadArea.classList.remove('dragging');
     });
 
     uploadArea.addEventListener('drop', (e) => {
         e.preventDefault();
-        uploadArea.style.backgroundColor = 'white';
+        uploadArea.classList.remove('dragging');
         const file = e.dataTransfer.files[0];
         handleFile(file);
     });
@@ -38,6 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const reader = new FileReader();
         reader.onload = async (e) => {
             try {
+                // Show loading overlay
+                loadingOverlay.classList.add('active');
+                errorDiv.textContent = '';
+
                 let conversations = JSON.parse(e.target.result);
                 const response = await fetch('/upload', {
                     method: 'POST',
@@ -50,20 +63,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response.ok) {
                     document.documentElement.innerHTML = await response.text();
                     
-                    // After successful upload, update the URL to include a timestamp
-                    // This helps prevent browser cache issues when reloading
+                    // Update URL with timestamp
                     window.history.replaceState(
                         {}, 
                         '', 
                         window.location.pathname + '?t=' + Date.now()
                     );
                 } else {
+                    // Hide loading overlay on error
+                    loadingOverlay.classList.remove('active');
                     errorDiv.textContent = 'Error uploading conversation';
                 }
             } catch (error) {
+                // Hide loading overlay on error
+                loadingOverlay.classList.remove('active');
                 errorDiv.textContent = 'Invalid JSON format';
             }
         };
+
+        reader.onerror = () => {
+            loadingOverlay.classList.remove('active');
+            errorDiv.textContent = 'Error reading file';
+        };
+
         reader.readAsText(file);
     }
 });
